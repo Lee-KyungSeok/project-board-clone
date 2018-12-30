@@ -1,13 +1,16 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "outDir": "build/dist",
-    "module": "commonjs",
+    "module": "esnext",
     "target": "es5",
-    "lib": ["es6", "dom", "esnext.asynciterable"],
+    "lib": [
+      "es6",
+      "dom",
+      "esnext.asynciterable"
+    ],
     "sourceMap": true,
     "allowJs": true,
-    "jsx": "react",
+    "jsx": "preserve",
     "moduleResolution": "node",
     "rootDir": "src",
     "forceConsistentCasingInFileNames": true,
@@ -26,6 +29,9 @@
     "isolatedModules": true,
     "noEmit": true
   },
+  "include": [
+    "src"
+  ],
   "exclude": [
     "node_modules",
     "build",
@@ -34,8 +40,5 @@
     "webpack",
     "jest",
     "src/setupTests.ts"
-  ],
-  "include": [
-    "src"
   ]
 }
