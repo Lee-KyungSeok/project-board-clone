@@ -1,5 +1,6 @@
 class Project {
 
+    public id?: number;
     public projectName: string;
     public projectIdentifier: string;
     public description: string;
@@ -7,7 +8,8 @@ class Project {
     public end_date: string;
 
 
-    constructor(projectName: string, projectIdentifier: string, description: string, start_date: string, end_date: string) {
+    constructor(id: number | undefined, projectName: string, projectIdentifier: string, description: string, start_date: string, end_date: string) {
+        this.id = id;
         this.projectName = projectName;
         this.projectIdentifier = projectIdentifier;
         this.description = description;

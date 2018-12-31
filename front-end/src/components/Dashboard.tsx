@@ -1,10 +1,27 @@
 import React from 'react';
+import {connect} from "react-redux";
+import {RouteComponentProps} from "react-router";
+import {bindActionCreators, Dispatch} from "redux";
+import * as projectActions from "../actions/projectActions";
+import Project from "../models/Project";
+import {RootAction, RootState} from "../reducers";
 import CreateProjectButton from "./Project/CreateProjectButton";
 import ProjectItem from "./Project/ProjectItem";
 
-class Dashboard extends React.Component {
+interface IProps extends RouteComponentProps<any> {
+    projects: Project[];
+    getProjects: () => void;
+}
+
+class Dashboard extends React.Component<IProps> {
+
+    public componentDidMount = () => {
+        const {getProjects} = this.props;
+        getProjects();
+    }
 
     public render() {
+        const {projects} = this.props;
         return(
             <div className="projects">
                 <div className="container">
@@ -15,8 +32,9 @@ class Dashboard extends React.Component {
                             <CreateProjectButton/>
                             <br/>
                             <hr/>
-                            <ProjectItem/>
-
+                            { projects.map(project => (
+                                <ProjectItem key={project.id} project={project}/>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -25,4 +43,12 @@ class Dashboard extends React.Component {
     }
 }
 
-export default Dashboard
+const mapStateToProps = (state: RootState) => ({
+    projects: state.project.projects
+});
+
+const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => bindActionCreators({
+    getProjects: () => projectActions.getProjects()
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

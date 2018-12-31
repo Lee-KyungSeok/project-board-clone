@@ -5,6 +5,7 @@ import './App.css';
 import Dashboard from "./components/Dashboard";
 import Header from "./components/Layout/Header";
 import AddProject from "./components/Project/AddProject";
+import UpdateProject from "./components/Project/UpdateProject";
 
 class App extends Component {
     public render() {
@@ -14,6 +15,7 @@ class App extends Component {
                     <Header/>
                     <Route exact={true} path="/dashboard" component={Dashboard}/>
                     <Route exact={true} path="/addProject" component={AddProject}/>
+                    <Route exact={true} path="/updateProject/:id" component={UpdateProject}/>
                 </div>
             </Router>
         );

@@ -2,7 +2,7 @@ import classNames from "classnames";
 import {History} from "history";
 import React from "react";
 import {connect} from "react-redux";
-import {RouteComponentProps} from "react-router-dom";
+import {RouteComponentProps} from "react-router";
 import {bindActionCreators, Dispatch} from "redux";
 import * as projectActions from "../../actions/projectActions";
 import Project from "../../models/Project";
@@ -10,11 +10,14 @@ import {RootAction, RootState} from "../../reducers";
 import {ErrorState} from "../../reducers/errorReducer";
 
 interface IProps extends RouteComponentProps<any> {
-    createProject: (project: Project, history: History) => any;
+    project?: Project;
     errors: ErrorState;
+    getProject: (id: number, history: History) => any;
+    createProject: (project: Project, history: History) => any;
 }
 
 interface IState {
+    id: number;
     projectName: string;
     projectIdentifier: string;
     description: string;
@@ -22,11 +25,24 @@ interface IState {
     end_date: string;
 }
 
-class AddProject extends React.Component<IProps, IState> {
-    constructor(props) {
+class UpdateProject extends React.Component<IProps, IState> {
+
+    public static getDerivedStateFromProps = (nextProps: IProps, prevState: IState) => {
+        const {project: {id=0, projectName='', projectIdentifier='', description='', start_date='', end_date=''} = {} } = nextProps;
+        const {id :stateId} = prevState;
+        if(id !== stateId) {
+            return {
+                id, projectName, projectIdentifier, description, start_date, end_date
+            }
+        }
+        return null;
+    }
+
+    constructor(props: IProps) {
         super(props);
 
         this.state = {
+            id: 0,
             projectName: '',
             projectIdentifier: '',
             description: '',
@@ -35,17 +51,26 @@ class AddProject extends React.Component<IProps, IState> {
         };
     }
 
+    public componentDidMount = () => {
+        const {history, match, getProject} = this.props;
+        const {params: {id}} = match;
+        getProject(id, history);
+    }
+
+
     public render() {
+
         const {onChange, onSubmit} = this;
         const {errors : {error} } = this.props;
         const {projectName, projectIdentifier, description, start_date, end_date} = this.state;
+
 
         return (
             <div className="project">
                 <div className="container">
                     <div className="row">
                         <div className="col-md-8 m-auto">
-                            <h5 className="display-4 text-center">Create Project form</h5>
+                            <h5 className="display-4 text-center">Update Project form</h5>
                             <hr/>
                             <form onSubmit={onSubmit}>
                                 <div className="form-group">
@@ -66,17 +91,14 @@ class AddProject extends React.Component<IProps, IState> {
                                 <div className="form-group">
                                     <input
                                         type="text"
-                                        className={classNames("form-control form-control-lg", {
-                                            "is-invalid": error.projectIdentifier
-                                        })}
+                                        className="form-control form-control-lg"
                                         placeholder="Unique Project ID"
                                         name="projectIdentifier"
+                                        disabled={true}
                                         value={projectIdentifier}
                                         onChange={onChange}
                                     />
-                                    { error.projectIdentifier && (
-                                        <div className="invalid-feedback">{error.projectIdentifier}</div>
-                                    )}                                </div>
+                                </div>
                                 <div className="form-group">
                                     <textarea
                                         className={classNames("form-control form-control-lg", {
@@ -97,7 +119,7 @@ class AddProject extends React.Component<IProps, IState> {
                                         type="date"
                                         className="form-control form-control-lg"
                                         name="start_date"
-                                        value={start_date}
+                                        value={start_date? start_date : ''}
                                         onChange={onChange}
                                     />
                                 </div>
@@ -107,7 +129,7 @@ class AddProject extends React.Component<IProps, IState> {
                                         type="date"
                                         className="form-control form-control-lg"
                                         name="end_date"
-                                        value={end_date}
+                                        value={end_date? end_date : ''}
                                         onChange={onChange}
                                     />
                                 </div>
@@ -121,7 +143,7 @@ class AddProject extends React.Component<IProps, IState> {
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 
     public onChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (event) => {
@@ -135,23 +157,22 @@ class AddProject extends React.Component<IProps, IState> {
     public onSubmit: React.FormEventHandler<HTMLFormElement> = event => {
         event.preventDefault();
         const {createProject, history} = this.props;
-        const {projectName, projectIdentifier, description, start_date, end_date} = this.state;
+        const {id, projectName, projectIdentifier, description, start_date, end_date} = this.state;
 
-        const newProject: Project = new Project(undefined, projectName, projectIdentifier, description, start_date, end_date);
+        const updateProject: Project = new Project(id, projectName, projectIdentifier, description, start_date, end_date);
 
-        createProject(newProject, history);
+        createProject(updateProject, history);
     }
 }
 
 const mapStateToProps = (state: RootState) => ({
+    project: state.project.project,
     errors: state.errors
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => bindActionCreators({
+    getProject: (id: number, history: History) => projectActions.getProject(id, history),
     createProject: (project: Project, history: History) => projectActions.createProject(project, history)
 }, dispatch);
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(AddProject);
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateProject);
