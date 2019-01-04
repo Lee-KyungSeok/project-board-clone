@@ -4,11 +4,11 @@ import {Dispatch} from "redux";
 import {createAction} from "typesafe-actions";
 import Project from "../models/Project";
 import {clearProjectError, createProjectError} from "./errorActions";
-import {CREATE_PROJECT, DELETE_PROJECT, GET_PROJECT, GET_PROJECTS} from "./types";
+import {DELETE_PROJECT, GET_PROJECT, GET_PROJECTS} from "./types";
 
 export const createProject = (project: Project, history: History) => async (dispatch: Dispatch) => {
     try {
-        const res = await axios.post("/api/project", project);
+        await axios.post("/api/project", project);
         history.push("/dashboard");
         dispatch(clearProjectError());
     } catch (err) {

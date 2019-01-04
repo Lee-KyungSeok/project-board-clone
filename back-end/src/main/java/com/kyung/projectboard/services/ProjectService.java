@@ -1,7 +1,9 @@
 package com.kyung.projectboard.services;
 
+import com.kyung.projectboard.domain.Backlog;
 import com.kyung.projectboard.domain.Project;
 import com.kyung.projectboard.exceptions.ProjectIdException;
+import com.kyung.projectboard.repository.BacklogRepository;
 import com.kyung.projectboard.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,10 +14,24 @@ public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
+    @Autowired
+    private BacklogRepository backlogRepository;
+
     public Project saveOrUpdateProject(Project project) {
 
         try {
             project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+
+            // backlog 가 없다면 저장, 있다면 불러와서 세팅
+            if(project.getId() == null) {
+                Backlog backlog = new Backlog();
+                project.setBacklog(backlog);
+                backlog.setProject(project);
+                backlog.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+            } else {
+                project.setBacklog(backlogRepository.findByProjectIdentifier(project.getProjectIdentifier().toUpperCase()));
+            }
+
             return projectRepository.save(project);
         } catch (Exception e) {
             throw new ProjectIdException("Project Id '" + project.getProjectIdentifier().toUpperCase() + "' already exist");

@@ -9,6 +9,8 @@ export interface ErrorState {
         projectName?: string,
         projectIdentifier?: string,
         description?: string,
+        summary?: string,
+        projectNotFound?: string
     };
 }
 

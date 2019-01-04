@@ -30,7 +30,7 @@ const projectReducer = (state: ProjectState = initialState, action: ProjectActio
             return {
                 ...state,
                 projects: state.projects.filter(project => project.projectIdentifier !== action.payload)
-            }
+            };
         default:
             return state;
     }
