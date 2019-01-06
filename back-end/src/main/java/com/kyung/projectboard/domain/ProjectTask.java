@@ -39,10 +39,10 @@ public class ProjectTask {
 
     @Column(updatable = false)
     @JsonFormat(pattern = "yyyy-mm-dd")
-    private Date create_At;
+    private Date created_At;
 
     @JsonFormat(pattern = "yyyy-mm-dd")
-    private Date update_at;
+    private Date updated_At;
 
     public ProjectTask() {
     }
@@ -111,20 +111,20 @@ public class ProjectTask {
         this.projectIdentifier = projectIdentifier;
     }
 
-    public Date getCreate_At() {
-        return create_At;
+    public Date getCreated_At() {
+        return created_At;
     }
 
-    public void setCreate_At(Date create_At) {
-        this.create_At = create_At;
+    public void setCreated_At(Date created_At) {
+        this.created_At = created_At;
     }
 
-    public Date getUpdate_at() {
-        return update_at;
+    public Date getUpdated_At() {
+        return updated_At;
     }
 
-    public void setUpdate_at(Date update_at) {
-        this.update_at = update_at;
+    public void setUpdated_At(Date updated_At) {
+        this.updated_At = updated_At;
     }
 
     public Backlog getBacklog() {
@@ -137,12 +137,12 @@ public class ProjectTask {
 
     @PrePersist
     protected void onCreate() {
-        this.create_At = new Date();
+        this.created_At = new Date();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.update_at = new Date();
+        this.updated_At = new Date();
     }
 
     @Override
@@ -157,8 +157,8 @@ public class ProjectTask {
                 ", dueDate=" + dueDate +
                 ", backlog=" + backlog +
                 ", projectIdentifier='" + projectIdentifier + '\'' +
-                ", create_At=" + create_At +
-                ", update_at=" + update_at +
+                ", created_At=" + created_At +
+                ", updated_At=" + updated_At +
                 '}';
     }
 }
