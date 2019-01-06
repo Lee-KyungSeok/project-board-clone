@@ -39,6 +39,12 @@ class ProjectBoard extends React.Component<IProps> {
                             {err.projectNotFound}
                         </div>
                     );
+                } else if (err.projectIdentifier) {
+                    return (
+                        <div className="alert alert-danger text-center" role="alert">
+                            {err.projectIdentifier}
+                        </div>
+                    );
                 } else {
                     return (
                         <div className="alert alert-info text-center" role="alert">

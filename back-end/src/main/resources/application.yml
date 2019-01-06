@@ -7,7 +7,7 @@ spring:
   jpa:
     database: mysql
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
     database-platform: org.hibernate.dialect.MySQL5Dialect #Using the right database platform is extremly important on Spring Boot 2.0
     properties:

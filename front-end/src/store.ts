@@ -5,7 +5,7 @@ import rootReducer from "./reducers";
 
 declare global {
     interface Window {
-        __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
+        __REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?: typeof compose;
     }
 }
 
@@ -13,9 +13,8 @@ const composeEnhancers = (
     window && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
 ) || compose;
 
-const middleware = [thunk];
-
 const initialState = {};
+const middleware = [thunk];
 
 const configureStore = () => {
     const storeCreated = createStore(

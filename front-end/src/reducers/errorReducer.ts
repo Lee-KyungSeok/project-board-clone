@@ -11,6 +11,10 @@ export interface ErrorState {
         description?: string,
         summary?: string,
         projectNotFound?: string
+        fullName?: string,
+        username?: string,
+        password?: string,
+        confirmPassword?: string,
     };
 }
 

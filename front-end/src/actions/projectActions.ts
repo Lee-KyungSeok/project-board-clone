@@ -17,6 +17,7 @@ export const createProject = (project: Project, history: History) => async (disp
 };
 
 export const getProjects = () => async (dispatch: Dispatch) => {
+    console.log(axios.defaults.headers);
     const res = await axios.get("/api/project/all");
     dispatch(getProjectsSuccess(res.data));
 };
